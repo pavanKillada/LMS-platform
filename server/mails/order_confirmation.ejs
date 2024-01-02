@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background-image: linear-gradient(135deg, #bdfbfc, #acd8fa, #ccabf5, #c4b3f2); /* Light Blue */
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    h1 {
+      color: #fff; /* White */
+      text-align: center;
+    }
+
+    p {
+      color: #333; /* Dark Gray */
+      line-height: 1.6;
+    }
+
+    .items-table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+
+    .items-table th, .items-table td {
+      border: 1px solid #fff; /* White */
+      padding: 10px;
+      text-align: left;
+    }
+
+    .items-table th {
+      background-color: #336699; /* Navy Blue */
+      color: #fff; /* White */
+    }
+
+    .total-cost {
+      margin-top: 20px;
+      text-align: right;
+    }
+
+    .total-cost p {
+      color: #11ad11; /* White */
+      font-size: 18px;
+    }
+
+    .contact-us {
+      margin-top: 20px;
+      text-align: center;
+      color: #0b083b; /* Light Orange */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Elearning Order Confirmation</h1>
+
+    <p>And we are just as excited as you are.</p>
+
+    <p>Thank you for purchasing courses from our Learning Management System (LMS). Your order details are as follows:</p>
+
+    <table class="items-table">
+        <tr>
+            <td>Order #: <%= order._id %></td>
+            <td>Order Date: <%= order.date %></td>
+        </tr>
+    </table>
+
+    <table class="items-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Quantity</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><%= order.name %></td>
+          <td>1</td>
+          <td>$<%= order.price %></td>
+        </tr>
+        <!-- Add more rows for additional items -->
+      </tbody>
+    </table>
+
+    <div class="total-cost">
+      <p><strong>Total Cost:</strong> $<%= order.price %></p>
+    </div>
+
+    <p class="contact-us">If you need any assistance or have questions, please feel free to contact us at <a href="mailto:support@example.com">support@example.com</a>.</p>
+
+    <p>Thank you for choosing our platform!</p>
+  </div>
+</body>
+</html>

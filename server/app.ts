@@ -5,6 +5,10 @@ import { ErrorMiddleware } from "./middleware/error";
 import userRoutes from './routes/user.route';
 import courseRouter from "./routes/course.route";
 require("dotenv").config();
+import orderRouter from "./routes/order.route";
+import notificationRoute from "./routes/notification.route";
+import analyticsRouter from "./routes/analytics.route";
+import layoutRouter from "./routes/layout.route";
 
 // initializing the app
 export const app = express();
@@ -23,8 +27,7 @@ app.use(
 );
 
 // routes
-app.use("/api/v1", userRoutes);
-app.use("/api/v1", courseRouter);
+app.use("/api/v1", userRoutes, courseRouter, orderRouter, notificationRoute, analyticsRouter, layoutRouter);
 
 // testing api
 app.get("/test", (req: Request, res: Response) => {

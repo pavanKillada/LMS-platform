@@ -2,13 +2,14 @@ import { Request, Response, NextFunction } from "express";
 import { CatchAsyncError } from "../middleware/catch_async_errors";
 import ErrorHandler from "../utils/error_handler";
 import cloudinary from "cloudinary";
-import { createCourse } from "../services/course.service";
+import { createCourse, getAllCoursesService } from "../services/course.service";
 import courseModel from "../models/course.model";
 import { redis } from "../utils/redis";
 import mongoose from "mongoose";
 import ejs from "ejs";
 import path from "path";
 import sendMail from "../utils/send_mail";
+import notificationModel from "../models/notification.model";
 
 // upload course
 export const uploadCourse = CatchAsyncError(
@@ -200,6 +201,13 @@ export const addQuestions = CatchAsyncError(
       // add this question to our course content
       courseContent.questions.push(newQuestion);
 
+      // send notification to the user on this question
+      await notificationModel.create({
+        user: req.user?._id,
+        title: "New Question Recieved",
+        message: `You have a new question in ${courseContent?.title}`,
+      });
+
       // save the updated course
       await course?.save();
 
@@ -230,7 +238,7 @@ export const addAnswer = CatchAsyncError(
       const course = await courseModel.findById(courseId);
 
       if (!mongoose.Types.ObjectId.isValid(contentId)) {
-        return next(new ErrorHandler("Invalid content ID 1", 400));
+        return next(new ErrorHandler("Invalid content ID", 400));
       }
 
       const courseContent = course?.courseData?.find((item: any) =>
@@ -238,7 +246,7 @@ export const addAnswer = CatchAsyncError(
       );
 
       if (!courseContent) {
-        return next(new ErrorHandler("Invalid content ID 2", 400));
+        return next(new ErrorHandler("Invalid content ID", 400));
       }
 
       const question = courseContent?.questions?.find((item: any) =>
@@ -246,7 +254,7 @@ export const addAnswer = CatchAsyncError(
       );
 
       if (!question) {
-        return next(new ErrorHandler("Invalid content ID 3", 400));
+        return next(new ErrorHandler("Invalid content ID", 400));
       }
 
       // create a new answer object
@@ -262,6 +270,11 @@ export const addAnswer = CatchAsyncError(
 
       if (req.user?._id === question.user._id) {
         // create a notification
+        await notificationModel.create({
+          user: req.user?._id,
+          title: "New Question Reply Received",
+          message: `You have a new question reply in ${courseContent?.title}`,
+        });
       } else {
         const data = {
           name: question.user.name,
@@ -388,7 +401,7 @@ export const addReplyToReview = CatchAsyncError(
         comment,
       };
 
-      if(!review.commentReplies){
+      if (!review.commentReplies) {
         review.commentReplies = [];
       }
 
@@ -402,6 +415,43 @@ export const addReplyToReview = CatchAsyncError(
       });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));
+    }
+  }
+);
+
+// get all courses -- onlt for admin
+export const getAllCoursesForAdmin = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      getAllCoursesService(res);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+// delete course -- only for admin
+export const deleteCourse = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+
+      const course = await courseModel.findById(id);
+
+      if (!course) {
+        return next(new ErrorHandler("Course not found", 404));
+      }
+
+      await course.deleteOne({ id });
+
+      await redis.del(id);
+
+      res.status(200).json({
+        success: true,
+        message: "course deleted successfully",
+      });
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
     }
   }
 );

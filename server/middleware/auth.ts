@@ -11,7 +11,7 @@ export const isAuthenticated = CatchAsyncError(
     const access_token = req.cookies.access_token as string;
 
     if (!access_token) {
-      return next(new ErrorHandler("User is not Authenticated", 401));
+      return next(new ErrorHandler("You are not Authenticated", 401));
     }
 
     const decoded = jwt.verify(

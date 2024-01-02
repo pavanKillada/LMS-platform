@@ -4,8 +4,10 @@ import {
   addQuestions,
   addReplyToReview,
   addReview,
+  deleteCourse,
   editCourse,
   getAllCourses,
+  getAllCoursesForAdmin,
   getCourseByUser,
   getSingleCourse,
   uploadCourse,
@@ -40,6 +42,25 @@ courseRouter.put("/add-answer", isAuthenticated, addAnswer);
 
 courseRouter.put("/add-review/:id", isAuthenticated, addReview);
 
-courseRouter.put("/add-reply", isAuthenticated, authorizedRoles("admin"), addReplyToReview);
+courseRouter.put(
+  "/add-reply",
+  isAuthenticated,
+  authorizedRoles("admin"),
+  addReplyToReview
+);
+
+courseRouter.get(
+  "/get-courses",
+  isAuthenticated,
+  authorizedRoles("admin"),
+  getAllCoursesForAdmin
+);
+
+courseRouter.delete(
+  "/delete-course/:id",
+  isAuthenticated,
+  authorizedRoles("admin"),
+  deleteCourse
+);
 
 export default courseRouter;
