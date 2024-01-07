@@ -12,7 +12,10 @@ import { useSelector } from "react-redux";
 import Image from "next/image";
 import avatar from "../../public/assets/avatar.png";
 import { useSession } from "next-auth/react";
-import { useSocialAuthMutation } from "@/redux/features/auth/authApi";
+import {
+  useLogoutQuery,
+  useSocialAuthMutation,
+} from "../../redux/features/auth/authApi";
 import { toast } from "react-hot-toast";
 
 type Props = {
@@ -29,6 +32,10 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
   const { user } = useSelector((state: any) => state.auth);
   const { data } = useSession();
   const [socialAuth, { isSuccess, error }] = useSocialAuthMutation();
+  const [logout, setLogout] = useState(false);
+  const {} = useLogoutQuery(undefined, {
+    skip: !logout ? true : false,
+  });
 
   useEffect(() => {
     if (!user) {
@@ -40,10 +47,15 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
         });
       }
     }
-    if (isSuccess) {
-      toast.success("Logged In Successfully!");
+    if (data === null) {
+      if (isSuccess) {
+        toast.success("Login Successful!");
+      }
     }
-    if(error){
+    if (data === null) {
+      setLogout(true);
+    }
+    if (error) {
       if ("data" in error) {
         const errorData = error as any;
         toast.error(errorData.data.message);
@@ -69,7 +81,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
     }
   };
 
-  console.log(user);
+  // console.log(user);
 
   return (
     <div className="w-full relative">
@@ -83,7 +95,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
         <div className="w-[95%] 800px:w-[92%] m-auto py-2 h-full">
           <div className="w-full h-[80px] flex items-center justify-between p-3">
             <div>
-              <Link
+              <Link 
                 href={"/"}
                 className={`text-[25px] flex flex-row justify-center font-Poppins font-[500] text-black dark:text-white`}
               >
@@ -104,10 +116,14 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
               {user ? (
                 <Link href={"/profile"}>
                   <Image
-                    src={user.avatar ? user.avatar : avatar}
+                    src={user.avatar ? user.avatar.url : avatar}
                     alt="avatar"
                     width={30}
-                    className=" cursor-pointer"
+                    height={30}
+                    className="cursor-pointer rounded-full aspect-square"
+                    style={{
+                      border: activeItem === 5 ? "2px solid #37a39a" : "none",
+                    }}
                   />
                 </Link>
               ) : (
@@ -129,11 +145,26 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
           >
             <div className="w-[70%] fixed z-[999999999] h-screen bg-white dark:bg-slate-900 dark:bg-opacity-90 top-0 right-0">
               <NavItems activeItem={activeItem} isMobile={true} />
-              <HiOutlineUserCircle
-                size={25}
-                className="cursor-pointer ml-5 my-2 dark:text-white text-black"
-                onClick={() => setOpen(true)}
-              />
+              {user ? (
+                <Link href={"/profile"}>
+                  <Image
+                    src={user.avatar ? user.avatar.url : avatar}
+                    alt="avatar"
+                    width={30}
+                    height={30}
+                    className="cursor-pointer rounded-full aspect-square"
+                    style={{
+                      border: activeItem === 5 ? "2px solid #37a39a" : "none",
+                    }}
+                  />
+                </Link>
+              ) : (
+                <HiOutlineUserCircle
+                  size={25}
+                  className="hidden 800px:block cursor-pointer dark:text-white text-black"
+                  onClick={() => setOpen(true)}
+                />
+              )}
               <br />
               <br />
               <p className="text-[16px] px-2 pl-5 text-black dark:text-white">
