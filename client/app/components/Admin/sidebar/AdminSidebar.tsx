@@ -100,7 +100,7 @@ const Sidebar = () => {
           top: 0,
           left: 0,
           height: "100vh",
-          width: isCollapsed ? "0%" : "18%",
+          width: isCollapsed ? "0%" : "16%"
         }}
       >
         <Menu iconShape="square">
@@ -109,7 +109,7 @@ const Sidebar = () => {
             onClick={() => setIsCollapsed(!isCollapsed)}
             icon={isCollapsed ? <ArrowForwardIosIcon /> : undefined}
             style={{
-              margin: "10px 0 20px 0",
+              margin: "10px 0 18px 0",
             }}
           >
             {!isCollapsed && (
@@ -160,7 +160,7 @@ const Sidebar = () => {
                 <Typography
                   variant="h6"
                   sx={{ m: "10px 0 0 0" }}
-                  className="!text-[20px] text-black dark:text-[#ffffffc1] capitalize"
+                  className="!text-[18px] text-green-500 dark:text-green-300 capitalize"
                 >
                   - {user?.role}
                 </Typography>
@@ -168,9 +168,9 @@ const Sidebar = () => {
             </Box>
           )}
           <div className="flex justify-center items-center w-[100%]">
-            <hr className="border-red-400 w-[95%]" />
+            <hr className="border-gray-400 dark:border-green-300 w-full" />
           </div>
-          <Box padding={isCollapsed ? undefined : "10%"}>
+          <Box padding={isCollapsed ? undefined : "15px 9px"}>
             <Item
               title="Dashboard"
               to="/admin"
@@ -179,7 +179,7 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <div className="flex justify-center items-center w-[100%]">
-              <hr className={`border-gray-700 border-dashed mt-3 ${isCollapsed ? "w-[70%]" : "w-full"}`} />
+              <hr className={`border-gray-400 dark:border-gray-700 border-dashed mt-3 ${isCollapsed ? "w-[70%]" : "w-[87%]"}`} />
             </div>
             <Typography
               variant="h5"
@@ -204,7 +204,7 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <div className="flex justify-center items-center w-[100%]">
-              <hr className={`border-gray-700 border-dashed mt-3 ${isCollapsed ? "w-[70%]" : "w-full"}`} />
+              <hr className={`border-gray-400 dark:border-gray-700 border-dashed mt-3 ${isCollapsed ? "w-[70%]" : "w-[87%]"}`} />
             </div>
             <Typography
               variant="h5"
@@ -228,7 +228,7 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <div className="flex justify-center items-center w-[100%]">
-              <hr className={`border-gray-700 border-dashed mt-3 ${isCollapsed ? "w-[70%]" : "w-full"}`} />
+              <hr className={`border-gray-400 dark:border-gray-700 border-dashed mt-3 ${isCollapsed ? "w-[70%]" : "w-[87%]"}`} />
             </div>
             <Typography
               variant="h5"
@@ -259,7 +259,7 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <div className="flex justify-center items-center w-[100%]">
-              <hr className={`border-gray-700 border-dashed mt-3 ${isCollapsed ? "w-[70%]" : "w-full"}`} />
+              <hr className={`border-gray-400 dark:border-gray-700 border-dashed mt-3 ${isCollapsed ? "w-[70%]" : "w-[87%]"}`} />
             </div>
             <Typography
               variant="h5"
@@ -276,7 +276,7 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <div className="flex justify-center items-center w-[100%]">
-              <hr className={`border-gray-700 border-dashed mt-3 ${isCollapsed ? "w-[70%]" : "w-full"}`} />
+              <hr className={`border-gray-400 dark:border-gray-700 border-dashed mt-3 ${isCollapsed ? "w-[70%]" : "w-[87%]"}`} />
             </div>
             <Typography
               variant="h6"
@@ -308,7 +308,7 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <div className="flex justify-center items-center w-[100%]">
-              <hr className={`border-gray-700 border-dashed mt-3 ${isCollapsed ? "w-[70%]" : "w-full"}`} />
+              <hr className={`border-gray-400 dark:border-gray-700 border-dashed mt-3 ${isCollapsed ? "w-[70%]" : "w-[87%]"}`} />
             </div>
             <Typography
               variant="h6"
