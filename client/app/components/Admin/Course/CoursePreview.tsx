@@ -1,29 +1,30 @@
-"use client";
 import React, { FC } from "react";
 import CoursePlayer from "../../../utils/CoursePlayer";
-import { styles } from "../../../styles/style";
-import Ratings from "../../../utils/Ratings";
+import { styles } from "../../../../app/styles/style";
+import Ratings from "../../../../app/utils/Ratings";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
 
 type Props = {
-  courseData: any;
   active: number;
   setActive: (active: number) => void;
+  courseData: any;
   handleCourseCreate: any;
+  isEdit?: boolean;
 };
 
 const CoursePreview: FC<Props> = ({
   courseData,
-  setActive,
   handleCourseCreate,
+  setActive,
   active,
+  isEdit
 }) => {
-  const discountPercentage =
-    ((courseData.estimatedPrice - courseData.price) /
-      courseData.estimatedPrice) *
+  const dicountPercentenge =
+    ((courseData?.estimatedPrice - courseData?.price) /
+      courseData?.estimatedPrice) *
     100;
 
-  const discountPercentagePrice = discountPercentage.toFixed(0);
+  const discountPercentengePrice = dicountPercentenge.toFixed(0);
 
   const prevButton = () => {
     setActive(active - 1);
@@ -43,110 +44,112 @@ const CoursePreview: FC<Props> = ({
           />
         </div>
         <div className="flex items-center">
-          <h1 className="pt-5 text-green-400 font-Poppins text-[25px]">
-            {courseData.price === 0 ? "Free" : "$" + courseData.price}
+          <h1 className="pt-5 text-[25px]">
+            {courseData?.price === 0 ? "Free" : "₹" + courseData?.price}
           </h1>
-          <h5 className="pl-3 text-red-400 font-Poppins text-[20px] mt-2 line-through opacity-80">
-            ${courseData.estimatedPrice}
+          <h5 className="pl-3 text-[20px] mt-2 line-through opacity-80">
+          ₹{courseData?.estimatedPrice}
           </h5>
-          <h4 className="pl-5 text-black dark:text-white font-Poppins pt-4 text-[22px]">
-            {discountPercentagePrice}% Off
+
+          <h4 className="pl-5 pt-4 text-[22px]">
+            {discountPercentengePrice}% Off
           </h4>
         </div>
+
         <div className="flex items-center">
           <div
             className={`${styles.button} !w-[180px] my-3 font-Poppins !bg-[crimson] cursor-not-allowed`}
           >
-            Buy Now ${courseData.price}
+            Buy Now ₹{courseData?.price}
           </div>
         </div>
+
         <div className="flex items-center">
           <input
             type="text"
+            name=""
+            id=""
             placeholder="Discount code..."
             className={`${styles.input} 1500px:!w-[50%] 1100px:w-[60%] ml-3 !mt-0`}
           />
-          <button
+          <div
             className={`${styles.button} !w-[120px] my-3 ml-4 font-Poppins cursor-pointer`}
           >
             Apply
-          </button>
+          </div>
         </div>
-        <p className="pb-1 font-Poppins hover:text-[18px] w-fit">
-          {`>`} Source code included
-        </p>
-        <p className="pb-1 font-Poppins hover:text-[18px] w-fit">
-          {`>`} Full lifetime access
-        </p>
-        <p className="pb-1 font-Poppins hover:text-[18px] w-fit">
-          {`>`} Certificate of completion
-        </p>
-        <p className="pb-3 800px:pb-1 font-Poppins hover:text-[18px] w-fit">
-          {`>`} Premium support
-        </p>
+        <p className="pb-1">• Source code included</p>
+        <p className="pb-1">• Full lifetime access</p>
+        <p className="pb-1">• Certificate of completion</p>
+        <p className="pb-3 800px:pb-1">• Premium Support</p>
       </div>
       <div className="w-full">
         <div className="w-full 800px:pr-5">
           <h1 className="text-[25px] font-Poppins font-[600]">
-            {courseData.name}
+            {courseData?.name}
           </h1>
           <div className="flex items-center justify-between pt-3">
             <div className="flex items-center">
               <Ratings rating={0} />
-              <h5 className="font-Poppins">0 Reviews</h5>
+              <h5>0 Reviews</h5>
             </div>
-            <h5 className="font-Poppins">0 Students</h5>
+            <h5>0 Students</h5>
           </div>
           <br />
           <h1 className="text-[25px] font-Poppins font-[600]">
             What you will learn from this course?
           </h1>
         </div>
-        {courseData.benefits.map((item: any, index: number) => (
+        {courseData?.benefits?.map((item: any, index: number) => (
           <div className="w-full flex 800px:items-center py-2" key={index}>
             <div className="w-[15px] mr-1">
               <IoCheckmarkDoneOutline size={20} />
             </div>
-            <p className="pl-2 font-Poppins">{item.title}</p>
+            <p className="pl-2">{item.title}</p>
           </div>
         ))}
+        <br />
         <br />
         <h1 className="text-[25px] font-Poppins font-[600]">
           What are the prerequisites for starting this course?
         </h1>
-        {courseData.prerequisites.map((item: any, index: number) => (
-          <div key={index} className="w-full flex 800px:items-center py-2">
+        {courseData?.prerequisites?.map((item: any, index: number) => (
+          <div className="w-full flex 800px:items-center py-2" key={index}>
             <div className="w-[15px] mr-1">
               <IoCheckmarkDoneOutline size={20} />
             </div>
-            <p className="pl-2 font-Poppins">{item.title}</p>
+            <p className="pl-2">{item.title}</p>
           </div>
         ))}
         <br />
-        {/* Course description */}
+        <br />
+        {/* course description */}
         <div className="w-full">
           <h1 className="text-[25px] font-Poppins font-[600]">
             Course Details
           </h1>
-          <p className="text-[18px] mt-[10px] whitespace-pre-line w-full overflow-hidden">
-            {courseData.description}
+          <p className="text-[18px] mt-[20px] whitespace-pre-line w-full overflow-hidden">
+            {courseData?.description}
           </p>
         </div>
         <br />
+        <br />
       </div>
       <div className="w-full flex items-center justify-between">
-        <button
-          className="w-full font-Poppins 800px:w-[180px] h-[40px] bg-[#37a39a] text-center text-[#fff] rounded mt-8 cursor-pointer"
+        <div
+          className="w-full 800px:w-[180px] flex items-center justify-center h-[40px] bg-[#37a39a] text-center text-[#fff] rounded mt-8 cursor-pointer"
           onClick={() => prevButton()}
         >
           Prev
-        </button>
-        <button
-          className="w-full font-Poppins 800px:w-[180px] h-[40px] bg-[#37a39a] text-center text-[#fff] rounded mt-8 cursor-pointer"
+        </div>
+        <div
+          className="w-full 800px:w-[180px] flex items-center justify-center h-[40px] bg-[#37a39a] text-center text-[#fff] rounded mt-8 cursor-pointer"
           onClick={() => createCourse()}
         >
-          Create
-        </button>
+         {
+          isEdit ? 'Update' : 'Create'
+         }
+        </div>
       </div>
     </div>
   );

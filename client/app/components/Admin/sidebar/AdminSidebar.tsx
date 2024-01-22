@@ -5,10 +5,10 @@ import { Box, IconButton, Typography } from "@mui/material";
 import "react-pro-sidebar/dist/css/styles.css";
 import {
   HomeOutlinedIcon,
-  ArrowBackIosIcon,
   ArrowForwardIosIcon,
-  PeopleoutlinedIcon,
-  ReceiptOutlinedicon,
+  ArrowBackIosIcon,
+  PeopleOutlinedIcon,
+  ReceiptOutlinedIcon,
   BarChartOutlinedIcon,
   MapOutlinedIcon,
   GroupsIcon,
@@ -20,8 +20,8 @@ import {
   ManageHistoryIcon,
   SettingsIcon,
   ExitToAppIcon,
-} from "./Icons";
-import avatarDefault from "../../../../public/assets/avatar.png";
+} from "./Icon";
+import avatarDefault from "../../../../public/assests/avatar.png";
 import { useSelector } from "react-redux";
 import Link from "next/link";
 import Image from "next/image";
@@ -50,7 +50,7 @@ const Item: FC<itemProps> = ({ title, to, icon, selected, setSelected }) => {
 
 const Sidebar = () => {
   const { user } = useSelector((state: any) => state.auth);
-  const [logout, setLogout] = useState(false);
+  const [logout, setlogout] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
   const [mounted, setMounted] = useState(false);
@@ -63,7 +63,7 @@ const Sidebar = () => {
   }
 
   const logoutHandler = () => {
-    setLogout(true);
+    setlogout(true);
   };
 
   return (
@@ -100,16 +100,17 @@ const Sidebar = () => {
           top: 0,
           left: 0,
           height: "100vh",
-          width: isCollapsed ? "0%" : "16%"
+          zIndex:99999999999999,
+          width: isCollapsed ? "0%" : "16%",
         }}
       >
         <Menu iconShape="square">
-          {/* logo and menu icon */}
+          {/* LOGO AND MENU ICON */}
           <MenuItem
             onClick={() => setIsCollapsed(!isCollapsed)}
             icon={isCollapsed ? <ArrowForwardIosIcon /> : undefined}
             style={{
-              margin: "10px 0 18px 0",
+              margin: "10px 0 20px 0",
             }}
           >
             {!isCollapsed && (
@@ -119,15 +120,12 @@ const Sidebar = () => {
                 alignItems="center"
                 ml="15px"
               >
-                <Link href={"/"}>
-                  <h3 className="text-[25px] font-Poppins uppercase dark:text-white text-black">
-                    ELearning
-                  </h3>
-                </Link>
-                <IconButton
-                  onClick={() => setIsCollapsed(!isCollapsed)}
-                  className="inline-block"
-                >
+               <Link href="/" className="block">
+               <h3 className="text-[25px] font-Poppins uppercase dark:text-white text-black">
+                  ELearning
+                </h3>
+               </Link>
+                <IconButton onClick={() => setIsCollapsed(!isCollapsed)} className="inline-block">
                   <ArrowBackIosIcon className="text-black dark:text-[#ffffffc1]" />
                 </IconButton>
               </Box>
@@ -160,17 +158,15 @@ const Sidebar = () => {
                 <Typography
                   variant="h6"
                   sx={{ m: "10px 0 0 0" }}
-                  className="!text-[18px] text-green-500 dark:text-green-300 capitalize"
+                  className="!text-[20px] text-black dark:text-[#ffffffc1] capitalize"
                 >
                   - {user?.role}
                 </Typography>
               </Box>
             </Box>
           )}
-          <div className="flex justify-center items-center w-[100%]">
-            <hr className="border-gray-400 dark:border-green-300 w-full" />
-          </div>
-          <Box padding={isCollapsed ? undefined : "15px 9px"}>
+
+          <Box paddingLeft={isCollapsed ? undefined : "10%"}>
             <Item
               title="Dashboard"
               to="/admin"
@@ -178,9 +174,7 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <div className="flex justify-center items-center w-[100%]">
-              <hr className={`border-gray-400 dark:border-gray-700 border-dashed mt-3 ${isCollapsed ? "w-[70%]" : "w-[87%]"}`} />
-            </div>
+
             <Typography
               variant="h5"
               sx={{ m: "15px 0 5px 25px" }}
@@ -199,17 +193,15 @@ const Sidebar = () => {
             <Item
               title="Invoices"
               to="/admin/invoices"
-              icon={<ReceiptOutlinedicon />}
+              icon={<ReceiptOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
-            <div className="flex justify-center items-center w-[100%]">
-              <hr className={`border-gray-400 dark:border-gray-700 border-dashed mt-3 ${isCollapsed ? "w-[70%]" : "w-[87%]"}`} />
-            </div>
+
             <Typography
               variant="h5"
+              className="!text-[18px] text-black dark:text-[#ffffffc1] capitalize !font-[400]"
               sx={{ m: "15px 0 5px 20px" }}
-              className="!text-[20px] text-black dark:text-[#ffffffc1] capitalize !font-[400]"
             >
               {!isCollapsed && "Content"}
             </Typography>
@@ -227,13 +219,11 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <div className="flex justify-center items-center w-[100%]">
-              <hr className={`border-gray-400 dark:border-gray-700 border-dashed mt-3 ${isCollapsed ? "w-[70%]" : "w-[87%]"}`} />
-            </div>
+
             <Typography
               variant="h5"
-              sx={{ m: "15px 0 5px 20px" }}
               className="!text-[18px] text-black dark:text-[#ffffffc1] capitalize !font-[400]"
+              sx={{ m: "15px 0 5px 20px" }}
             >
               {!isCollapsed && "Customization"}
             </Typography>
@@ -246,7 +236,7 @@ const Sidebar = () => {
             />
             <Item
               title="FAQ"
-              to="/faq"
+              to="/admin/faq"
               icon={<QuizIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -258,30 +248,26 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <div className="flex justify-center items-center w-[100%]">
-              <hr className={`border-gray-400 dark:border-gray-700 border-dashed mt-3 ${isCollapsed ? "w-[70%]" : "w-[87%]"}`} />
-            </div>
+
             <Typography
               variant="h5"
-              sx={{ m: "15px 0 5px 20px" }}
               className="!text-[18px] text-black dark:text-[#ffffffc1] capitalize !font-[400]"
+              sx={{ m: "15px 0 5px 20px" }}
             >
               {!isCollapsed && "Controllers"}
             </Typography>
             <Item
               title="Manage Team"
               to="/admin/team"
-              icon={<PeopleoutlinedIcon />}
+              icon={<PeopleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
-            <div className="flex justify-center items-center w-[100%]">
-              <hr className={`border-gray-400 dark:border-gray-700 border-dashed mt-3 ${isCollapsed ? "w-[70%]" : "w-[87%]"}`} />
-            </div>
+
             <Typography
               variant="h6"
-              sx={{ m: "15px 0 5px 20px" }}
               className="!text-[18px] text-black dark:text-[#ffffffc1] capitalize !font-[400]"
+              sx={{ m: "15px 0 5px 20px" }}
             >
               {!isCollapsed && "Analytics"}
             </Typography>
@@ -307,23 +293,14 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <div className="flex justify-center items-center w-[100%]">
-              <hr className={`border-gray-400 dark:border-gray-700 border-dashed mt-3 ${isCollapsed ? "w-[70%]" : "w-[87%]"}`} />
-            </div>
+
             <Typography
               variant="h6"
-              sx={{ m: "15px 0 5px 20px" }}
               className="!text-[18px] text-black dark:text-[#ffffffc1] capitalize !font-[400]"
+              sx={{ m: "15px 0 5px 20px" }}
             >
               {!isCollapsed && "Extras"}
             </Typography>
-            <Item
-              title="Settings"
-              to="/admin/settings"
-              icon={<SettingsIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
             <div onClick={logoutHandler}>
               <Item
                 title="Logout"

@@ -1,6 +1,5 @@
-'use client'
-import { useActivationMutation } from "../../../redux/features/auth/authApi";
-import { styles } from "../../styles/style";
+import { styles } from "@/app/styles/style";
+import { useActivationMutation } from "@/redux/features/auth/authApi";
 import React, { FC, useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { VscWorkspaceTrusted } from "react-icons/vsc";
@@ -20,11 +19,11 @@ type VerifyNumber = {
 const Verification: FC<Props> = ({ setRoute }) => {
   const { token } = useSelector((state: any) => state.auth);
   const [activation, { isSuccess, error }] = useActivationMutation();
-  const [invalidError, setInvalidError] = useState<Boolean>(false);
+  const [invalidError, setInvalidError] = useState<boolean>(false);
 
   useEffect(() => {
     if (isSuccess) {
-      toast.success("Account activated successfully!");
+      toast.success("Account activated successfully");
       setRoute("Login");
     }
     if (error) {
@@ -36,7 +35,7 @@ const Verification: FC<Props> = ({ setRoute }) => {
         console.log("An error occured:", error);
       }
     }
-  }, [isSuccess, error, setRoute]);
+  }, [isSuccess, error]);
 
   const inputRefs = [
     useRef<HTMLInputElement>(null),
@@ -45,7 +44,7 @@ const Verification: FC<Props> = ({ setRoute }) => {
     useRef<HTMLInputElement>(null),
   ];
 
-  const [verifyNumber, setVerifynumber] = useState<VerifyNumber>({
+  const [verifyNumber, setVerifyNumber] = useState<VerifyNumber>({
     0: "",
     1: "",
     2: "",
@@ -67,7 +66,7 @@ const Verification: FC<Props> = ({ setRoute }) => {
   const handleInputChange = (index: number, value: string) => {
     setInvalidError(false);
     const newVerifyNumber = { ...verifyNumber, [index]: value };
-    setVerifynumber(newVerifyNumber);
+    setVerifyNumber(newVerifyNumber);
 
     if (value === "" && index > 0) {
       inputRefs[index - 1].current?.focus();
@@ -87,20 +86,19 @@ const Verification: FC<Props> = ({ setRoute }) => {
       </div>
       <br />
       <br />
-      <div className="1100px:w-[70%] m-auto flex items-center justify-around">
+      <div className="m-auto flex items-center justify-around">
         {Object.keys(verifyNumber).map((key, index) => (
           <input
             type="number"
             key={key}
             ref={inputRefs[index]}
-            className={`w-[65px] h-[65px] mx-3 bg-transparent border-[3px] rounded-[10px] flex items-center text-black dark:text-white justify-center text-[18px] font-Poppins outline-none text-center ${
+            className={`w-[65px] h-[65px] bg-transparent border-[3px] rounded-[10px] flex items-center text-black dark:text-white justify-center text-[18px] font-Poppins outline-none text-center ${
               invalidError
                 ? "shake border-red-500"
                 : "dark:border-white border-[#0000004a]"
             }`}
             placeholder=""
-            max={9}
-            min={0}
+            maxLength={1}
             value={verifyNumber[key as keyof VerifyNumber]}
             onChange={(e) => handleInputChange(index, e.target.value)}
           />
@@ -117,7 +115,7 @@ const Verification: FC<Props> = ({ setRoute }) => {
       <h5 className="text-center pt-4 font-Poppins text-[14px] text-black dark:text-white">
         Go back to sign in?{" "}
         <span
-          className="text-[#2190ff] pl-2 cursor-pointer"
+          className="text-[#2190ff] pl-1 cursor-pointer"
           onClick={() => setRoute("Login")}
         >
           Sign in

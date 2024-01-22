@@ -1,20 +1,30 @@
-import React from "react";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Box, Button } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { DataGrid } from "@mui/x-data-grid";
+import { Box, Button, Modal } from "@mui/material";
 import { AiOutlineDelete } from "react-icons/ai";
-import { FiEdit2 } from "react-icons/fi";
 import { useTheme } from "next-themes";
-import { useGetAllCoursesQuery } from "../../../../redux/features/courses/coursesApi";
+import { FiEdit2 } from "react-icons/fi";
+import {
+  useDeleteCourseMutation,
+  useGetAllCoursesQuery,
+} from "@/redux/features/courses/coursesApi";
 import Loader from "../../Loader/Loader";
-import {format} from "timeago.js";
+import { format } from "timeago.js";
+import { styles } from "@/app/styles/style";
+import { toast } from "react-hot-toast";
+import Link from "next/link";
 
 type Props = {};
 
 const AllCourses = (props: Props) => {
   const { theme, setTheme } = useTheme();
-
-  const { isLoading, data, error } = useGetAllCoursesQuery({});
-
+  const [open, setOpen] = useState(false);
+  const [courseId, setCourseId] = useState("");
+  const { isLoading, data, refetch } = useGetAllCoursesQuery(
+    {},
+    { refetchOnMountOrArgChange: true }
+  );
+  const [deleteCourse, { isSuccess, error }] = useDeleteCourseMutation({});
   const columns = [
     { field: "id", headerName: "ID", flex: 0.5 },
     { field: "title", headerName: "Course Title", flex: 1 },
@@ -22,15 +32,15 @@ const AllCourses = (props: Props) => {
     { field: "purchased", headerName: "Purchased", flex: 0.5 },
     { field: "created_at", headerName: "Created At", flex: 0.5 },
     {
-      field: "",
+      field: "  ",
       headerName: "Edit",
       flex: 0.2,
       renderCell: (params: any) => {
         return (
           <>
-            <Button>
+            <Link href={`/admin/edit-course/${params.row.id}`}>
               <FiEdit2 className="dark:text-white text-black" size={20} />
-            </Button>
+            </Link>
           </>
         );
       },
@@ -42,7 +52,12 @@ const AllCourses = (props: Props) => {
       renderCell: (params: any) => {
         return (
           <>
-            <Button>
+            <Button
+              onClick={() => {
+                setOpen(!open);
+                setCourseId(params.row.id);
+              }}
+            >
               <AiOutlineDelete
                 className="dark:text-white text-black"
                 size={20}
@@ -54,7 +69,7 @@ const AllCourses = (props: Props) => {
     },
   ];
 
-  let rows:any = [];
+  const rows: any = [];
 
   {
     data &&
@@ -68,6 +83,25 @@ const AllCourses = (props: Props) => {
         });
       });
   }
+
+  useEffect(() => {
+    if (isSuccess) {
+      setOpen(false);
+      refetch();
+      toast.success("Course Deleted Successfully");
+    }
+    if (error) {
+      if ("data" in error) {
+        const errorMessage = error as any;
+        toast.error(errorMessage.data.message);
+      }
+    }
+  }, [isSuccess, error,refetch]);
+
+  const handleDelete = async () => {
+    const id = courseId;
+    await deleteCourse(id);
+  };
 
   return (
     <div className="mt-[120px]">
@@ -100,15 +134,15 @@ const AllCourses = (props: Props) => {
                 color: theme === "dark" ? "#fff" : "#000",
               },
               "& .MuiDataGrid-cell": {
-                borderBottom: "none",
+                borderBottom: "none!important",
               },
               "& .name-column--cell": {
                 color: theme === "dark" ? "#fff" : "#000",
               },
               "& .MuiDataGrid-columnHeaders": {
-                color: theme === "dark" ? "#fff" : "#000",
-                borderBottom: "none",
                 backgroundColor: theme === "dark" ? "#3e4396" : "#A4A9FC",
+                borderBottom: "none",
+                color: theme === "dark" ? "#fff" : "#000",
               },
               "& .MuiDataGrid-virtualScroller": {
                 backgroundColor: theme === "dark" ? "#1F2A40" : "#F2F0F0",
@@ -120,15 +154,43 @@ const AllCourses = (props: Props) => {
               },
               "& .MuiCheckbox-root": {
                 color:
-                  theme === "dark" ? "#b7ebde !important" : "#000 !important",
+                  theme === "dark" ? `#b7ebde !important` : `#000 !important`,
               },
               "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-                color: "#fff !important",
+                color: `#fff !important`,
               },
             }}
           >
             <DataGrid checkboxSelection rows={rows} columns={columns} />
           </Box>
+          {open && (
+            <Modal
+              open={open}
+              onClose={() => setOpen(!open)}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[450px] bg-white dark:bg-slate-900 rounded-[8px] shadow p-4 outline-none">
+                <h1 className={`${styles.title}`}>
+                  Are you sure you want to delete this course?
+                </h1>
+                <div className="flex w-full items-center justify-between mb-6 mt-4">
+                  <div
+                    className={`${styles.button} !w-[120px] h-[30px] bg-[#47d097]`}
+                    onClick={() => setOpen(!open)}
+                  >
+                    Cancel
+                  </div>
+                  <div
+                    className={`${styles.button} !w-[120px] h-[30px] bg-[#d63f3f]`}
+                    onClick={handleDelete}
+                  >
+                    Delete
+                  </div>
+                </div>
+              </Box>
+            </Modal>
+          )}
         </Box>
       )}
     </div>

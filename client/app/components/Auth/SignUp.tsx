@@ -1,6 +1,5 @@
 "use client";
 import React, { FC, useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
@@ -9,8 +8,9 @@ import {
   AiFillGithub,
 } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
-import { styles } from "../../styles/style";
-import { useRegisterMutation } from "../../../redux/features/auth/authApi";
+import { styles } from "../../../app/styles/style";
+import { useRegisterMutation } from "@/redux/features/auth/authApi";
+import { toast } from "react-hot-toast";
 
 type Props = {
   setRoute: (route: string) => void;
@@ -20,34 +20,35 @@ const schema = Yup.object().shape({
   name: Yup.string().required("Please enter your name!"),
   email: Yup.string()
     .email("Invalid email!")
-    .required("Please enter your email"),
+    .required("Please enter your email!"),
   password: Yup.string().required("Please enter your password!").min(6),
 });
 
-const SignUp: FC<Props> = ({ setRoute }) => {
+const Signup: FC<Props> = ({ setRoute }) => {
   const [show, setShow] = useState(false);
-  const [register, { data, error, isSuccess }] = useRegisterMutation();
+  const [register,{data,error,isSuccess}] = useRegisterMutation(); 
+
   useEffect(() => {
-    if (isSuccess) {
-      const message = data?.message || "Registration Successful";
+   if(isSuccess){
+      const message = data?.message || "Registration successful";
       toast.success(message);
       setRoute("Verification");
+   }
+   if(error){
+    if("data" in error){
+      const errorData = error as any;
+      toast.error(errorData.data.message);
     }
-    if (error) {
-      if ("data" in error) {
-        const errorData = error as any;
-        toast.error(errorData.data.message);
-      }
-    }
-  }, [isSuccess, error, data?.message, setRoute]);
+   }
+  }, [isSuccess,error]);
+  
+
   const formik = useFormik({
     initialValues: { name: "", email: "", password: "" },
     validationSchema: schema,
-    onSubmit: async ({ name, email, password }) => {
+    onSubmit: async ({name, email, password }) => {
       const data = {
-        name,
-        email,
-        password,
+        name,email,password
       };
       await register(data);
     },
@@ -57,11 +58,11 @@ const SignUp: FC<Props> = ({ setRoute }) => {
 
   return (
     <div className="w-full">
-      <h1 className={`${styles.title}`}>Join in ELearning</h1>
+      <h1 className={`${styles.title}`}>Join to ELearning</h1>
       <form onSubmit={handleSubmit}>
-        <div className="mb-7">
-          <label htmlFor="name" className={`${styles.label}`}>
-            Enter Your Name
+        <div className="mb-3">
+          <label className={`${styles.label}`} htmlFor="email">
+            Enter your Name
           </label>
           <input
             type="text"
@@ -69,7 +70,7 @@ const SignUp: FC<Props> = ({ setRoute }) => {
             value={values.name}
             onChange={handleChange}
             id="name"
-            placeholder="pavan kumar"
+            placeholder="johndoe"
             className={`${errors.name && touched.name && "border-red-500"} ${
               styles.input
             }`}
@@ -78,62 +79,56 @@ const SignUp: FC<Props> = ({ setRoute }) => {
             <span className="text-red-500 pt-2 block">{errors.name}</span>
           )}
         </div>
-        <div className="mb-7">
-          <label htmlFor="email" className={`${styles.label}`}>
-            Enter Your Email
+        <label className={`${styles.label}`} htmlFor="email">
+          Enter your Email
+        </label>
+        <input
+          type="email"
+          name=""
+          value={values.email}
+          onChange={handleChange}
+          id="email"
+          placeholder="loginmail@gmail.com"
+          className={`${errors.email && touched.email && "border-red-500"} ${
+            styles.input
+          }`}
+        />
+        {errors.email && touched.email && (
+          <span className="text-red-500 pt-2 block">{errors.email}</span>
+        )}
+        <div className="w-full mt-5 relative mb-1">
+          <label className={`${styles.label}`} htmlFor="email">
+            Enter your password
           </label>
           <input
-            type="email"
-            name=""
-            value={values.email}
+            type={!show ? "password" : "text"}
+            name="password"
+            value={values.password}
             onChange={handleChange}
-            id="email"
-            placeholder="example@gmail.com"
-            className={`${errors.email && touched.email && "border-red-500"} ${
-              styles.input
-            }`}
-          />
-          {errors.email && touched.email && (
-            <span className="text-red-500 pt-2 block">{errors.email}</span>
-          )}
-        </div>
-        <div className="mb-7">
-          <label htmlFor="email" className={`${styles.label}`}>
-            Enter Your Password
-          </label>
-          <div
-            className={`w-full relative border flex items-center ${
+            id="password"
+            placeholder="password!@%"
+            className={`${
               errors.password && touched.password && "border-red-500"
             } ${styles.input}`}
-          >
-            <input
-              type={!show ? "password" : "text"}
-              name="password"
-              value={values.password}
-              onChange={handleChange}
-              id="password"
-              placeholder="password!@%"
-              className="border-none w-full h-full bg-transparent outline-none"
+          />
+          {!show ? (
+            <AiOutlineEyeInvisible
+              className="absolute bottom-3 right-2 z-1 cursor-pointer"
+              size={20}
+              onClick={() => setShow(true)}
             />
-            {!show ? (
-              <AiOutlineEyeInvisible
-                className="aboslute bottom-3 right-2 z-1 cursor-pointer"
-                size={20}
-                onClick={() => setShow(true)}
-              />
-            ) : (
-              <AiOutlineEye
-                className="aboslute bottom-3 right-2 z-1 cursor-pointer"
-                size={20}
-                onClick={() => setShow(false)}
-              />
-            )}
-          </div>
-          {errors.password && touched.password && (
-            <span className="text-red-500 pt-2 block">{errors.password}</span>
+          ) : (
+            <AiOutlineEye
+              className="absolute bottom-3 right-2 z-1 cursor-pointer"
+              size={20}
+              onClick={() => setShow(false)}
+            />
           )}
         </div>
-        <div className="w-full">
+        {errors.password && touched.password && (
+          <span className="text-red-500 pt-2 block">{errors.password}</span>
+        )}
+        <div className="w-full mt-5">
           <input type="submit" value="Sign Up" className={`${styles.button}`} />
         </div>
         <br />
@@ -153,10 +148,10 @@ const SignUp: FC<Props> = ({ setRoute }) => {
             Sign in
           </span>
         </h5>
-        <br />
       </form>
+      <br />
     </div>
   );
 };
 
-export default SignUp;
+export default Signup;

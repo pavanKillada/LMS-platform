@@ -8,26 +8,27 @@ import {
   AiFillGithub,
 } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
-import { styles } from "../../styles/style";
-import { useLoginMutation } from "../../../redux/features/auth/authApi";
-import toast from "react-hot-toast";
-import {signIn} from 'next-auth/react';
+import { styles } from "../../../app/styles/style";
+import { useLoginMutation } from "@/redux/features/auth/authApi";
+import { toast } from "react-hot-toast";
+import {signIn} from "next-auth/react";
 
 type Props = {
   setRoute: (route: string) => void;
   setOpen: (open: boolean) => void;
+  refetch:any;
 };
 
 const schema = Yup.object().shape({
   email: Yup.string()
     .email("Invalid email!")
-    .required("Please enter your email"),
+    .required("Please enter your email!"),
   password: Yup.string().required("Please enter your password!").min(6),
 });
 
-const Login: FC<Props> = ({ setRoute, setOpen }) => {
+const Login: FC<Props> = ({ setRoute, setOpen,refetch }) => {
   const [show, setShow] = useState(false);
-  const [login, { isSuccess, data, error }] = useLoginMutation();
+  const [login, { isSuccess, error }] = useLoginMutation();
   const formik = useFormik({
     initialValues: { email: "", password: "" },
     validationSchema: schema,
@@ -38,8 +39,9 @@ const Login: FC<Props> = ({ setRoute, setOpen }) => {
 
   useEffect(() => {
     if (isSuccess) {
-      toast.success("Login Successful!");
+      toast.success("Login Successfully!");
       setOpen(false);
+      refetch();
     }
     if (error) {
       if ("data" in error) {
@@ -47,7 +49,7 @@ const Login: FC<Props> = ({ setRoute, setOpen }) => {
         toast.error(errorData.data.message);
       }
     }
-  }, [isSuccess, error, setOpen]);
+  }, [isSuccess, error]);
 
   const { errors, touched, values, handleChange, handleSubmit } = formik;
 
@@ -55,62 +57,56 @@ const Login: FC<Props> = ({ setRoute, setOpen }) => {
     <div className="w-full">
       <h1 className={`${styles.title}`}>Login with ELearning</h1>
       <form onSubmit={handleSubmit}>
-        <div className="mb-7">
-          <label htmlFor="email" className={`${styles.label}`}>
-            Enter Your Email
+        <label className={`${styles.label}`} htmlFor="email">
+          Enter your Email
+        </label>
+        <input
+          type="email"
+          name=""
+          value={values.email}
+          onChange={handleChange}
+          id="email"
+          placeholder="loginmail@gmail.com"
+          className={`${errors.email && touched.email && "border-red-500"} ${
+            styles.input
+          }`}
+        />
+        {errors.email && touched.email && (
+          <span className="text-red-500 pt-2 block">{errors.email}</span>
+        )}
+        <div className="w-full mt-5 relative mb-1">
+          <label className={`${styles.label}`} htmlFor="email">
+            Enter your password
           </label>
           <input
-            type="email"
-            name=""
-            value={values.email}
+            type={!show ? "password" : "text"}
+            name="password"
+            value={values.password}
             onChange={handleChange}
-            id="email"
-            placeholder="example@gmail.com"
-            className={`${errors.email && touched.email && "border-red-500"} ${
-              styles.input
-            }`}
-          />
-          {errors.email && touched.email && (
-            <span className="text-red-500 pt-2 block">{errors.email}</span>
-          )}
-        </div>
-        <div className="mb-7">
-          <label htmlFor="email" className={`${styles.label}`}>
-            Enter Your Password
-          </label>
-          <div
-            className={`w-full relative border flex items-center ${
+            id="password"
+            placeholder="password!@%"
+            className={`${
               errors.password && touched.password && "border-red-500"
             } ${styles.input}`}
-          >
-            <input
-              type={!show ? "password" : "text"}
-              name="password"
-              value={values.password}
-              onChange={handleChange}
-              id="password"
-              placeholder="password!@%"
-              className="border-none w-full h-full bg-transparent outline-none"
+          />
+          {!show ? (
+            <AiOutlineEyeInvisible
+              className="absolute bottom-3 right-2 z-1 cursor-pointer"
+              size={20}
+              onClick={() => setShow(true)}
             />
-            {!show ? (
-              <AiOutlineEyeInvisible
-                className="aboslute bottom-3 right-2 z-1 cursor-pointer"
-                size={20}
-                onClick={() => setShow(true)}
-              />
-            ) : (
-              <AiOutlineEye
-                className="aboslute bottom-3 right-2 z-1 cursor-pointer"
-                size={20}
-                onClick={() => setShow(false)}
-              />
-            )}
-          </div>
+          ) : (
+            <AiOutlineEye
+              className="absolute bottom-3 right-2 z-1 cursor-pointer"
+              size={20}
+              onClick={() => setShow(false)}
+            />
+          )}
           {errors.password && touched.password && (
             <span className="text-red-500 pt-2 block">{errors.password}</span>
           )}
         </div>
-        <div className="w-full">
+        <div className="w-full mt-5">
           <input type="submit" value="Login" className={`${styles.button}`} />
         </div>
         <br />
@@ -118,8 +114,10 @@ const Login: FC<Props> = ({ setRoute, setOpen }) => {
           Or join with
         </h5>
         <div className="flex items-center justify-center my-3">
-          <FcGoogle size={30} className="cursor-pointer mr-2" onClick={()=>signIn("google")} />
-          <AiFillGithub size={30} className="cursor-pointer ml-2" onClick={()=>signIn("github")} />
+          <FcGoogle size={30} className="cursor-pointer mr-2"
+          onClick={() => signIn("google")}
+          />
+          <AiFillGithub size={30} className="cursor-pointer ml-2" onClick={() => signIn("github")} />
         </div>
         <h5 className="text-center pt-4 font-Poppins text-[14px]">
           Not have any account?{" "}
@@ -130,8 +128,8 @@ const Login: FC<Props> = ({ setRoute, setOpen }) => {
             Sign up
           </span>
         </h5>
-        <br />
       </form>
+      <br />
     </div>
   );
 };

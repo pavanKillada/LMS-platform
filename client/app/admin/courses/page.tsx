@@ -1,23 +1,23 @@
 'use client'
-import DashboardHero from '../../components/Admin/DashboardHero'
-import AdminSidebar from '../../components/Admin/sidebar/AdminSidebar'
-import AdminProtected from '../../hooks/adminProtected'
-import Heading from '../../utils/Heading'
+import DashboardHero from '@/app/components/Admin/DashboardHero'
+import AdminProtected from '@/app/hooks/adminProtected'
+import Heading from '@/app/utils/Heading'
 import React from 'react'
-import AllCourses from '../../components/Admin/Course/AllCourses'
+import AdminSidebar from "../../components/Admin/sidebar/AdminSidebar";
+import AllCourses from "../../components/Admin/Course/AllCourses";
 
 type Props = {}
 
-const Page = (props: Props) => {
+const page = (props: Props) => {
   return (
     <div>
       <AdminProtected>
         <Heading
-          title="ELearning - Admin"
+          title="Elearning - Admin"
           description="ELearning is a platform for students to learn and get help from teachers"
-          keywords="Programming, MERN, Redux, Machine Learning"
+          keywords="Programming,MERN,Redux,Machine Learning"
         />
-        <div className="flex min-h-screen">
+        <div className="flex h-screen">
           <div className="1500px:w-[16%] w-1/5">
             <AdminSidebar />
           </div>
@@ -31,4 +31,4 @@ const Page = (props: Props) => {
   )
 }
 
-export default Page
+export default page

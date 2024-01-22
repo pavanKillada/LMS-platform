@@ -11,18 +11,23 @@ export const userApi = apiSlice.injectEndpoints({
       }),
     }),
     editProfile: builder.mutation({
-      query: ({name}) => ({
+      query: ({ name }) => ({
         url: "update-user-info",
         method: "PUT",
-        body: { name},
+        body: {
+          name,
+        },
         credentials: "include" as const,
       }),
     }),
     updatePassword: builder.mutation({
-      query: ({oldPassword, newPassword}) => ({
+      query: ({ oldPassword, newPassword }) => ({
         url: "update-user-password",
         method: "PUT",
-        body: { oldPassword, newPassword},
+        body: {
+          oldPassword,
+          newPassword,
+        },
         credentials: "include" as const,
       }),
     }),
@@ -33,7 +38,29 @@ export const userApi = apiSlice.injectEndpoints({
         credentials: "include" as const,
       }),
     }),
+    updateUserRole: builder.mutation({
+      query: ({ email, role }) => ({
+        url: "update-user",
+        method: "PUT",
+        body: { email, role },
+        credentials: "include" as const,
+      }),
+    }),
+    deleteUser: builder.mutation({
+      query: (id) => ({
+        url: `delete-user/${id}`,
+        method: "DELETE",
+        credentials: "include" as const,
+      }),
+    }),
   }),
 });
 
-export const { useUpdateAvatarMutation, useEditProfileMutation, useUpdatePasswordMutation, useGetAllUsersQuery } = userApi;
+export const {
+  useUpdateAvatarMutation,
+  useEditProfileMutation,
+  useUpdatePasswordMutation,
+  useGetAllUsersQuery,
+  useUpdateUserRoleMutation,
+  useDeleteUserMutation
+} = userApi;

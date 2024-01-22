@@ -7,21 +7,21 @@ import DashboardHero from "../components/Admin/DashboardHero";
 
 type Props = {};
 
-const Page = (props: Props) => {
+const page = (props: Props) => {
   return (
     <div>
       <AdminProtected>
         <Heading
-          title="ELearning - Admin"
+          title="Elearning - Admin"
           description="ELearning is a platform for students to learn and get help from teachers"
-          keywords="Programming, MERN, Redux, Machine Learning"
+          keywords="Programming,MERN,Redux,Machine Learning"
         />
-        <div className="flex min-h-[100vh]">
+        <div className="flex min-h-screen">
           <div className="1500px:w-[16%] w-1/5">
             <AdminSidebar />
           </div>
           <div className="w-[85%]">
-            <DashboardHero />
+            <DashboardHero isDashboard={true} />
           </div>
         </div>
       </AdminProtected>
@@ -29,4 +29,4 @@ const Page = (props: Props) => {
   );
 };
 
-export default Page;
+export default page;

@@ -1,11 +1,10 @@
-"use client";
 import Image from "next/image";
 import React, { FC } from "react";
-import avatarDefault from "../../../public/assets/avatar.png";
+import avatarDefault from "../../../public/assests/avatar.png";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { SiCoursera } from "react-icons/si";
 import { AiOutlineLogout } from "react-icons/ai";
-import { MdAdminPanelSettings } from "react-icons/md";
+import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import Link from "next/link";
 
 type Props = {
@@ -13,7 +12,7 @@ type Props = {
   active: number;
   avatar: string | null;
   setActive: (active: number) => void;
-  logoutHandler: any;
+  logOutHandler: any;
 };
 
 const SideBarProfile: FC<Props> = ({
@@ -21,8 +20,9 @@ const SideBarProfile: FC<Props> = ({
   active,
   avatar,
   setActive,
-  logoutHandler,
+  logOutHandler,
 }) => {
+  console.log('this is the role',user)
   return (
     <div className="w-full">
       <div
@@ -50,7 +50,7 @@ const SideBarProfile: FC<Props> = ({
         }`}
         onClick={() => setActive(2)}
       >
-        <RiLockPasswordLine size={20} className="dark:text-white text-[gray]" />
+        <RiLockPasswordLine size={20} className="dark:text-white text-black"  />
         <h5 className="pl-2 800px:block hidden font-Poppins dark:text-white text-black">
           Change Password
         </h5>
@@ -61,7 +61,7 @@ const SideBarProfile: FC<Props> = ({
         }`}
         onClick={() => setActive(3)}
       >
-        <SiCoursera size={20} className="dark:text-white text-[gray]" />
+        <SiCoursera size={20} className="dark:text-white text-black"  />
         <h5 className="pl-2 800px:block hidden font-Poppins dark:text-white text-black">
           Enrolled Courses
         </h5>
@@ -73,10 +73,7 @@ const SideBarProfile: FC<Props> = ({
           }`}
           href={"/admin"}
         >
-          <MdAdminPanelSettings
-            size={20}
-            className="dark:text-white text-[gray]"
-          />
+          <MdOutlineAdminPanelSettings size={20} className="dark:text-white text-black"  />
           <h5 className="pl-2 800px:block hidden font-Poppins dark:text-white text-black">
             Admin Dashboard
           </h5>
@@ -86,11 +83,11 @@ const SideBarProfile: FC<Props> = ({
         className={`w-full flex items-center px-3 py-4 cursor-pointer ${
           active === 4 ? "dark:bg-slate-800 bg-white" : "bg-transparent"
         }`}
-        onClick={() => logoutHandler()}
+        onClick={() => logOutHandler()}
       >
-        <AiOutlineLogout size={20} className="dark:text-white text-[gray]" />
+        <AiOutlineLogout size={20} className="dark:text-white text-black" />
         <h5 className="pl-2 800px:block hidden font-Poppins dark:text-white text-black">
-          Logout
+          Log Out
         </h5>
       </div>
     </div>

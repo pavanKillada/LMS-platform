@@ -1,8 +1,8 @@
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import PeopleoutlinedIcon from "@mui/icons-material/PeopleOutlined";
-import ReceiptOutlinedicon from "@mui/icons-material/ReceiptOutlined";
+import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
+import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import GroupsIcon from "@mui/icons-material/Groups";
@@ -16,11 +16,11 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 
 export {
-  HomeOutlinedIcon,
-  ArrowBackIosIcon,
+    HomeOutlinedIcon,
   ArrowForwardIosIcon,
-  PeopleoutlinedIcon,
-  ReceiptOutlinedicon,
+  ArrowBackIosIcon,
+  PeopleOutlinedIcon,
+  ReceiptOutlinedIcon,
   BarChartOutlinedIcon,
   MapOutlinedIcon,
   GroupsIcon,
@@ -32,4 +32,4 @@ export {
   ManageHistoryIcon,
   SettingsIcon,
   ExitToAppIcon,
-};
+}
