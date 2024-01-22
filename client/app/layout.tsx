@@ -1,6 +1,8 @@
 "use client";
 import "./globals.css";
+//@ts-ignore
 import { Poppins } from "next/font/google";
+//@ts-ignore
 import { Josefin_Sans } from "next/font/google";
 import { ThemeProvider } from "./utils/theme-provider";
 import { Toaster } from "react-hot-toast";
