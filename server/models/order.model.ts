@@ -1,28 +1,27 @@
-import mongoose, { Document, Model, Schema, mongo } from "mongoose";
+import mongoose, {Document,Model,Schema} from "mongoose";
 
-export interface IOrder extends Document {
-  courseId: string;
-  userId: string;
-  paymentInfo: object;
+
+export interface IOrder extends Document{
+    courseId: string;
+    userId?:string;
+    payment_info: object;
 }
 
-const orderSchema = new Schema<IOrder>(
-  {
+const orderSchema = new Schema<IOrder>({
     courseId: {
-      type: String,
-      required: true,
+     type: String,
+     required: true
     },
-    userId: {
-      type: String,
-      required: true,
+    userId:{
+        type: String,
+        required: true
     },
-    paymentInfo: {
-      type: Object,
+    payment_info:{
+        type: Object,
+        // required: true
     },
-  },
-  { timestamps: true }
-);
+},{timestamps: true});
 
-const orderModel: Model<IOrder> = mongoose.model("Order", orderSchema);
+const OrderModel: Model<IOrder> = mongoose.model('Order',orderSchema);
 
-export default orderModel;
+export default OrderModel;

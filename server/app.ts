@@ -1,17 +1,16 @@
+require("dotenv").config();
 import express, { NextFunction, Request, Response } from "express";
+export const app = express();
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { ErrorMiddleware } from "./middleware/error";
-import userRoutes from './routes/user.route';
+import userRouter from "./routes/user.route";
 import courseRouter from "./routes/course.route";
-require("dotenv").config();
 import orderRouter from "./routes/order.route";
-import notificationRoute from "./routes/notification.route";
+import notificationRouter from "./routes/notification.route";
 import analyticsRouter from "./routes/analytics.route";
 import layoutRouter from "./routes/layout.route";
-
-// initializing the app
-export const app = express();
+import { rateLimit } from 'express-rate-limit'
 
 // body parser
 app.use(express.json({ limit: "50mb" }));
@@ -22,29 +21,45 @@ app.use(cookieParser());
 // cors => cross origin resource sharing
 app.use(
   cors({
-    origin: [`${process.env.ORIGIN}`],
+    origin: ["http://localhost:3000"],
     credentials: true,
   })
 );
 
+// api requests limit
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000,
+	max: 100, 
+	standardHeaders: 'draft-7', 
+	legacyHeaders: false, 
+})
+
 // routes
-app.use("/api/v1", userRoutes, courseRouter, orderRouter, notificationRoute, analyticsRouter, layoutRouter);
+app.use(
+  "/api/v1",
+  userRouter,
+  orderRouter,
+  courseRouter,
+  notificationRouter,
+  analyticsRouter,
+  layoutRouter
+);
 
 // testing api
-app.get("/test", (req: Request, res: Response) => {
+app.get("/test", (req: Request, res: Response, next: NextFunction) => {
   res.status(200).json({
-    success: true,
+    succcess: true,
     message: "API is working",
   });
 });
 
-// unknown routes
+// unknown route
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
-  const error = new Error(
-    `Can't find ${req.originalUrl} on this server!`
-  ) as any;
-  error.statusCode = 404;
-  next(error);
+  const err = new Error(`Route ${req.originalUrl} not found`) as any;
+  err.statusCode = 404;
+  next(err);
 });
 
+// middleware calls
+app.use(limiter);
 app.use(ErrorMiddleware);

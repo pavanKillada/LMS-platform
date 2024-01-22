@@ -1,14 +1,14 @@
-import mongoose, { Document, Model, Schema, mongo } from "mongoose";
-import bcrypt from "bcryptjs";
 require("dotenv").config();
+import mongoose, { Document, Model, Schema } from "mongoose";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 const emailRegexPattern: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export interface IUser extends Document {
+  name: string;
   email: string;
   password: string;
-  name: string;
   avatar: {
     public_id: string;
     url: string;
@@ -40,7 +40,7 @@ const userSchema: Schema<IUser> = new mongoose.Schema(
     },
     password: {
       type: String,
-      minlength: [6, "Password must be at lease 6 characters"],
+      minlength: [6, "Password must be at least 6 characters"],
       select: false,
     },
     avatar: {
@@ -61,12 +61,10 @@ const userSchema: Schema<IUser> = new mongoose.Schema(
       },
     ],
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-// Hash password before saving
+// Hash Password before saving
 userSchema.pre<IUser>("save", async function (next) {
   if (!this.isModified("password")) {
     next();

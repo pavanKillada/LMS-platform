@@ -5,7 +5,7 @@ interface MonthData {
   count: number;
 }
 
-export async function generateLast12MonthsData<T extends Document>(
+export async function generateLast12MothsData<T extends Document>(
   model: Model<T>
 ): Promise<{ last12Months: MonthData[] }> {
   const last12Months: MonthData[] = [];
@@ -23,7 +23,8 @@ export async function generateLast12MonthsData<T extends Document>(
       endDate.getMonth(),
       endDate.getDate() - 28
     );
-    const monthYear = endDate.toLocaleDateString("default", {
+
+    const monthYear = endDate.toLocaleString("default", {
       day: "numeric",
       month: "short",
       year: "numeric",

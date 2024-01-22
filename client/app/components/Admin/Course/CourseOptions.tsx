@@ -20,7 +20,7 @@ const CourseOptions: FC<Props> = ({ active, setActive }) => {
         <div key={index} className="w-full flex py-5">
           <div
             className={`w-[35px] h-[35px] rounded-full flex items-center justify-center ${
-              active > index ? "bg-blue-500" : "bg-[#384766]"
+              active + 1 > index ? "bg-blue-500" : "bg-[#384766]"
             } relative`}
           >
             {active + 1 > index ? <IoMdCheckmark className="text-[25px]" /> : <IoMdRadioButtonOn className="text-[25px]" />}

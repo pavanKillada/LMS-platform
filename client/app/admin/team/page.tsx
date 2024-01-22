@@ -2,7 +2,7 @@
 import React from "react";
 import AdminSidebar from "../../components/Admin/sidebar/AdminSidebar";
 import Heading from "../../utils/Heading";
-import CreateCourse from "../../components/Admin/Course/CreateCourse";
+import AllUsers from "../../components/Admin/Course/AllUsers";
 import DashboardHeader from "../../components/Admin/DashboardHeader";
 
 type Props = {};
@@ -21,7 +21,7 @@ const Page = (props: Props) => {
         </div>
         <div className="w-[85%]">
             <DashboardHeader />
-            <CreateCourse />
+            <AllUsers isTeam={true} />
         </div>
       </div>
     </div>

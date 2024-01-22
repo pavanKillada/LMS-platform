@@ -1,32 +1,14 @@
 import express from "express";
-import { authorizedRoles, isAuthenticated } from "../middleware/auth";
-import {
-  getCoursesAnalytics,
-  getOrdersAnalytics,
-  getUsersAnalytics,
-} from "../controllers/analytics.controller";
-
+import { authorizeRoles, isAutheticated } from "../middleware/auth";
+import { getCoursesAnalytics, getOrderAnalytics, getUsersAnalytics } from "../controllers/analytics.controller";
 const analyticsRouter = express.Router();
 
-analyticsRouter.get(
-  "/get-users-analytics",
-  isAuthenticated,
-  authorizedRoles("admin"),
-  getUsersAnalytics
-);
 
-analyticsRouter.get(
-  "/get-courses-analytics",
-  isAuthenticated,
-  authorizedRoles("admin"),
-  getCoursesAnalytics
-);
+analyticsRouter.get("/get-users-analytics", isAutheticated,authorizeRoles("admin"), getUsersAnalytics);
 
-analyticsRouter.get(
-  "/get-orders-analytics",
-  isAuthenticated,
-  authorizedRoles("admin"),
-  getOrdersAnalytics
-);
+analyticsRouter.get("/get-orders-analytics", isAutheticated,authorizeRoles("admin"), getOrderAnalytics);
+
+analyticsRouter.get("/get-courses-analytics", isAutheticated,authorizeRoles("admin"), getCoursesAnalytics);
+
 
 export default analyticsRouter;
